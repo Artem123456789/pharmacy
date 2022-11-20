@@ -49,7 +49,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = ["rest_framework", "rest_framework_simplejwt", "django_extensions",
                     "whitenoise.runserver_nostatic"]
 
-LOCAL_APPS = ["_auth"]
+LOCAL_APPS = ["_auth", "medicines"]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
