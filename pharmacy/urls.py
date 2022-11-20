@@ -22,7 +22,8 @@ from pharmacy import settings
 
 urlpatterns = [
     path(settings.URL_PREFFIX+"admin/", admin.site.urls),
-    path("auth/", include("_auth.urls", namespace="auth")),
-    path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh")
+    path(settings.URL_PREFFIX+"auth/", include("_auth.urls", namespace="auth")),
+    path(settings.URL_PREFFIX+"token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path(settings.URL_PREFFIX+"token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path(settings.URL_PREFFIX+"medicines", include("medicines.urls", namespace="medicines")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
