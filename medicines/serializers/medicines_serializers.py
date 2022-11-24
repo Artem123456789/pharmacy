@@ -7,4 +7,4 @@ class MedicineSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Medicine
-        fields = ["name", "price"]
+        fields = ["id", "name", "price", "manufacturer"]

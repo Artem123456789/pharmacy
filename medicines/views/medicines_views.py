@@ -1,4 +1,4 @@
-from rest_framework import viewsets, generics
+from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from medicines.serializers import medicines_serializers
 from medicines.models import Medicine
