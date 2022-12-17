@@ -1,19 +1,23 @@
+from datetime import datetime, timedelta
+
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
 from django.contrib.auth import get_user_model
 
-from libs.base_models import NamedModel
 from medicines.models import Medicine
-
+from orders.constants import DEFAULT_DELIVERY_DATE_SHIFT
 
 User = get_user_model()
 
 
-class Order(NamedModel, TimeStampedModel):
+class Order(TimeStampedModel):
     user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
+    issue_date = models.DateField(default=datetime.now().date() + timedelta(days=DEFAULT_DELIVERY_DATE_SHIFT))
+    is_ready = models.BooleanField(default=False)
+    is_issued = models.BooleanField(default=False)
 
 
-class OrderItem(NamedModel, TimeStampedModel):
+class OrderItem(TimeStampedModel):
     medicine = models.ForeignKey(Medicine, blank=True, null=True, on_delete=models.SET_NULL)
     order = models.ForeignKey(Order, blank=True, null=True, on_delete=models.SET_NULL)
     count = models.IntegerField(blank=True, null=True)
