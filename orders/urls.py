@@ -1,10 +1,11 @@
+from django.urls import path
 from rest_framework import routers
 
-from orders.views.orders_views import OrdersViewSet
+from orders.views.orders_views import OrderListView
 
 app_name = "orders"
 
-router = routers.DefaultRouter()
-router.register(b"orders", OrdersViewSet, basename="orders")
 
-urlpatterns = router.get_urls()
+urlpatterns = [
+    path("orders/", OrderListView.as_view(), name="orders"),
+]
