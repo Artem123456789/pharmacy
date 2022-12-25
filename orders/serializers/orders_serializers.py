@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from medicines.models import Medicine, Manufacturer
+from orders.constants import SHORT_LABEL_MAX_ITEMS
 from orders.models import Order, OrderItem
 
 
@@ -42,12 +43,25 @@ class OrderItemModelSerializer(serializers.ModelSerializer):
         ]
 
 
-class OrdersModelSerializer(serializers.ModelSerializer):
-    items = serializers.SerializerMethodField()
+class OrdersListSerializer(serializers.ModelSerializer):
+    short_label = serializers.SerializerMethodField()
+    total_amount = serializers.SerializerMethodField()
 
-    def get_items(self, order: Order):
+    def get_short_label(self, order: Order):
+        items = OrderItem.objects.filter(order=order)[:SHORT_LABEL_MAX_ITEMS]
+        label = ""
+        for item in items:
+            label += item.medicine.name + ", "
+
+        return label.rstrip(", ") + "..."
+
+    def get_total_amount(self, order: Order):
+        amount = 0
         items = OrderItem.objects.filter(order=order)
-        return OrderItemModelSerializer(items, many=True).data
+        for item in items:
+            amount += item.medicine.price * item.count
+
+        return amount
 
     class Meta:
         model = Order
@@ -56,5 +70,34 @@ class OrdersModelSerializer(serializers.ModelSerializer):
             "issue_date",
             "is_ready",
             "is_issued",
-            "items"
+            "short_label",
+            "total_amount"
+        ]
+
+
+class OrdersModelSerializer(serializers.ModelSerializer):
+    items = serializers.SerializerMethodField()
+    total_amount = serializers.SerializerMethodField()
+
+    def get_items(self, order: Order):
+        items = OrderItem.objects.filter(order=order)
+        return OrderItemModelSerializer(items, many=True).data
+
+    def get_total_amount(self, order: Order):
+        amount = 0
+        items = OrderItem.objects.filter(order=order)
+        for item in items:
+            amount += item.medicine.price * item.count
+
+        return amount
+
+    class Meta:
+        model = Order
+        fields = [
+            "id",
+            "issue_date",
+            "is_ready",
+            "is_issued",
+            "items",
+            "total_amount"
         ]
