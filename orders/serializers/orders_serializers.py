@@ -67,7 +67,7 @@ class OrdersListSerializer(serializers.ModelSerializer):
         model = Order
         fields = [
             "id",
-            "issue_date",
+            "delivery_date",
             "is_ready",
             "is_issued",
             "short_label",
@@ -75,7 +75,7 @@ class OrdersListSerializer(serializers.ModelSerializer):
         ]
 
 
-class OrdersModelSerializer(serializers.ModelSerializer):
+class OrderRetrieveSerializer(serializers.ModelSerializer):
     items = serializers.SerializerMethodField()
     total_amount = serializers.SerializerMethodField()
 
@@ -95,7 +95,7 @@ class OrdersModelSerializer(serializers.ModelSerializer):
         model = Order
         fields = [
             "id",
-            "issue_date",
+            "delivery_date",
             "is_ready",
             "is_issued",
             "items",

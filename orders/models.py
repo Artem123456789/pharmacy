@@ -13,7 +13,7 @@ User = get_user_model()
 
 class Order(TimeStampedModel):
     user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
-    issue_date = models.DateField(default=datetime.now().date() + timedelta(days=DEFAULT_DELIVERY_DATE_SHIFT))
+    delivery_date = models.DateField(default=datetime.now().date() + timedelta(days=DEFAULT_DELIVERY_DATE_SHIFT))
     is_ready = models.BooleanField(default=False)
     is_issued = models.BooleanField(default=False)
 

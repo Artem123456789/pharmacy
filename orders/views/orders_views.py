@@ -1,24 +1,21 @@
-from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
-from libs.permissions import IsOwnerPermission
-from orders.handlers.orders_handlers import OrdersHandler
+from libs.serialziers import NoneSerializer
 from orders.models import Order
-from orders.serializers.orders_serializers import OrdersModelSerializer, OrdersListSerializer
+from orders.serializers.orders_serializers import OrderRetrieveSerializer, OrdersListSerializer
 
 
-class OrderListView(ListAPIView):
+class OrdersViewSet(ModelViewSet):
     queryset = Order.objects.all()
-    serializer_class = OrdersListSerializer
+    serializer_class = OrderRetrieveSerializer
     permission_classes = [IsAuthenticated]
 
-    def list(self, request, *args, **kwargs):
-        user_orders = OrdersHandler.user_orders(request.user)
-        return Response(OrdersListSerializer(user_orders, many=True).data)
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)
 
-
-class OrderDetailView(RetrieveAPIView):
-    queryset = Order.objects.all()
-    serializer_class = OrdersModelSerializer
-    permission_classes = [IsOwnerPermission]
+    def get_serializer_class(self):
+        return {
+            "list": OrdersListSerializer,
+            "retrieve": OrderRetrieveSerializer
+        }.get(self.action, NoneSerializer)
