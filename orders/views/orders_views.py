@@ -38,14 +38,11 @@ class OrderItemViewSet(ModelViewSet):
     serializer_class = NoneSerializer
     permission_classes = [IsAuthenticated]
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
     def get_queryset(self):
         if self.action == "create":
             return self.queryset
         else:
-            queryset = OrderItem.objects.filter(order__user=self.request.user)
+            return OrderItem.objects.filter(order__user=self.request.user)
 
     def get_serializer_class(self):
         return {

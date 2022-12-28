@@ -119,6 +119,7 @@ class OrderItemCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
         fields = [
+            "uuid",
             "medicine",
             "order",
             "count"
