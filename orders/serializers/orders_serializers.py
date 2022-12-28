@@ -38,6 +38,7 @@ class OrderItemModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
         fields = [
+            "uuid",
             "medicine",
             "count"
         ]
@@ -53,7 +54,7 @@ class OrdersListSerializer(serializers.ModelSerializer):
         for item in items:
             label += item.medicine.name + ", "
 
-        return label.rstrip(", ") + "..."
+        return "No items" if label == "" else label.rstrip(", ") + "..."
 
     def get_total_amount(self, order: Order):
         amount = 0
@@ -66,7 +67,7 @@ class OrdersListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = [
-            "id",
+            "uuid",
             "delivery_date",
             "is_ready",
             "is_issued",
@@ -94,10 +95,40 @@ class OrderRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = [
-            "id",
+            "uuid",
             "delivery_date",
             "is_ready",
             "is_issued",
             "items",
             "total_amount"
+        ]
+
+
+class OrderCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Order
+        fields = [
+            "uuid",
+            "user"
+        ]
+
+
+class OrderItemCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OrderItem
+        fields = [
+            "medicine",
+            "order",
+            "count"
+        ]
+
+
+class OrderItemUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OrderItem
+        fields = [
+            "count"
         ]

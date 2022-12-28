@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+import uuid
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
 from django.contrib.auth import get_user_model
@@ -12,8 +13,10 @@ User = get_user_model()
 
 
 class Order(TimeStampedModel):
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
     delivery_date = models.DateField(default=datetime.now().date() + timedelta(days=DEFAULT_DELIVERY_DATE_SHIFT))
+    is_in_work = models.BooleanField(default=False)
     is_ready = models.BooleanField(default=False)
     is_issued = models.BooleanField(default=False)
 
@@ -23,6 +26,7 @@ class Order(TimeStampedModel):
 
 
 class OrderItem(TimeStampedModel):
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     medicine = models.ForeignKey(Medicine, blank=True, null=True, on_delete=models.SET_NULL)
     order = models.ForeignKey(Order, blank=True, null=True, on_delete=models.SET_NULL)
     count = models.IntegerField(blank=True, null=True)
