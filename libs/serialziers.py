@@ -64,3 +64,7 @@ class EnumField(serializers.Field):
         raise serializers.ValidationError(
             "Acceptable values are {0}.".format(list(self._choices.values()))
         )
+
+
+class NoneSerializer(serializers.Serializer):
+    pass
