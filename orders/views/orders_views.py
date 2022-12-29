@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from libs.serialziers import NoneSerializer
+from orders.handlers.orders_handlers import OrdersHandler
 from orders.models import Order, OrderItem
 from orders.serializers.orders_serializers import (
     OrderRetrieveSerializer,
@@ -49,6 +50,15 @@ class OrderItemViewSet(ModelViewSet):
             "create": OrderItemCreateSerializer,
             "update": OrderItemUpdateSerializer,
         }.get(self.action, NoneSerializer)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        if OrdersHandler.add_order_item_count(serializer=serializer):
+            return Response(status=status.HTTP_200_OK)
+
+        return super().create(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
         item: OrderItem = self.get_object()

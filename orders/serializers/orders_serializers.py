@@ -69,6 +69,7 @@ class OrdersListSerializer(serializers.ModelSerializer):
         fields = [
             "uuid",
             "delivery_date",
+            "is_in_work",
             "is_ready",
             "is_issued",
             "short_label",
@@ -97,6 +98,7 @@ class OrderRetrieveSerializer(serializers.ModelSerializer):
         fields = [
             "uuid",
             "delivery_date",
+            "is_in_work",
             "is_ready",
             "is_issued",
             "items",
