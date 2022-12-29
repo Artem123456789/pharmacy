@@ -1,4 +1,4 @@
-from orders.models import OrderItem
+from orders.models import OrderItem, Order
 from django.contrib.auth import get_user_model
 
 from orders.serializers.orders_serializers import OrderItemCreateSerializer
@@ -21,3 +21,8 @@ class OrdersHandler:
             return True
 
         return False
+
+    @staticmethod
+    def set_order_into_work(order: Order) -> None:
+        order.is_in_work = True
+        order.save()

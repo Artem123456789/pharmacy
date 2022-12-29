@@ -1,4 +1,5 @@
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -11,7 +12,7 @@ from orders.serializers.orders_serializers import (
     OrdersListSerializer,
     OrderCreateSerializer,
     OrderItemCreateSerializer,
-    OrderItemUpdateSerializer
+    OrderItemUpdateSerializer,
 )
 
 
@@ -32,6 +33,13 @@ class OrdersViewSet(ModelViewSet):
             "list": OrdersListSerializer,
             "retrieve": OrderRetrieveSerializer
         }.get(self.action, NoneSerializer)
+
+    @action(methods=["post"], detail=True)
+    def set_order_into_work(self, request, *args, **kwargs):
+        order: Order = self.get_object()
+        OrdersHandler.set_order_into_work(order=order)
+
+        return Response(status=status.HTTP_200_OK)
 
 
 class OrderItemViewSet(ModelViewSet):
