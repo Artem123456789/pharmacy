@@ -3,9 +3,14 @@ version: "3.8"
 services:
   pharmacy_db:
     image: postgres
+    volumes:
+      - pgdata_volume:/var/lib/postgresql/data/
     ports:
       - "5441:5432"
     environment:
       - POSTGRES_DB=pharmacy
       - POSTGRES_USER=pharmacy_user
       - POSTGRES_PASSWORD=pharmacy_user_pass
+
+volumes:
+  pgdata_volume:
